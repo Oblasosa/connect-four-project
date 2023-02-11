@@ -26,10 +26,10 @@ function makeBoard() {
 
 function makeHtmlBoard() {
   // TODO: get "htmlBoard" variable from the item in HTML w/ID of "board"
-  let htmlBoard = document.getElementById('board');
+  const htmlBoard = document.getElementById('board');
   // TODO: add comment for this code
   // creates and adds number of columns to table
-  let top = document.createElement("tr");
+  const top = document.createElement("tr");
   top.setAttribute("id", "column-top");
   top.addEventListener("click", handleClick);
 
@@ -57,21 +57,25 @@ function makeHtmlBoard() {
 
 function findSpotForCol(x) {
   // TODO: write the real version of this, rather than always returning 0
-  if (y == null || y === 'undefined') {
-    return y = 0;
-  } else return null;
+  for (let y = HEIGHT - 1; y >= 0; y--) {
+    if (!board[y][x]) {
+      return y;
+    }
+  }
+  return null;
 }
 
 /** placeInTable: update DOM to place piece into HTML table of board */
 
 function placeInTable(y, x) {
   // TODO: make a div and insert into correct table cell
-  let placement = document.createElement("div");
-  placement.classList.add("piece",`p${currPlayer}`);
+  const piece = document.createElement("div");
+  piece.classList.add("piece");
+  piece.classList.add(`p${currPlayer}`);
   piece.style.top = -50 * (y + 2);
 
-  let cell = document.getElementById(`${y}-${x}`);
-  cell.append(placement);
+  const cell = document.getElementById(`${y}-${x}`);
+  cell.append(piece);
 }
 
 /** endGame: announce game end */
