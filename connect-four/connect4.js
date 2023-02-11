@@ -18,20 +18,15 @@ let board = []; // array of rows, each row is array of cells  (board[y][x])
 function makeBoard() {
   // TODO: set "board" to empty HEIGHT x WIDTH matrix array
   for (let i=0; i <= HEIGHT; i++) {
-    let row = [];
-    for (let j=0; j <= WIDTH; j++) {
-      row.push(' ');
-    }
-    board.push(row);
+    board.push(Array.from({length: WIDTH}));
   }
 }
 
 /** makeHtmlBoard: make HTML table and row of column tops. */
 
 function makeHtmlBoard() {
-  let board = htmlBoard;
   // TODO: get "htmlBoard" variable from the item in HTML w/ID of "board"
-  let htmlBoard = document.querySelector('#board');
+  let htmlBoard = document.getElementById('board');
   // TODO: add comment for this code
   // creates and adds number of columns to table
   let top = document.createElement("tr");
@@ -72,16 +67,18 @@ function findSpotForCol(x) {
 function placeInTable(y, x) {
   // TODO: make a div and insert into correct table cell
   let placement = document.createElement("div");
-  placement.classList.add("piece",`${currPlayer}`);
+  placement.classList.add("piece",`p${currPlayer}`);
+  piece.style.top = -50 * (y + 2);
+
   let cell = document.getElementById(`${y}-${x}`);
-  return cell.append(placement);
+  cell.append(placement);
 }
 
 /** endGame: announce game end */
 
 function endGame(msg) {
   // TODO: pop up alert message
-  alert("Game Over!");
+  alert(msg);
 }
 
 /** handleClick: handle click of column top to play piece */
@@ -99,6 +96,7 @@ function handleClick(evt) {
   // place piece in board and add to HTML table
   // TODO: add line to update in-memory board
   placeInTable(y, x);
+  board[y][x] = currPlayer;
 
   // check for win
   if (checkForWin()) {
@@ -107,9 +105,12 @@ function handleClick(evt) {
 
   // check for tie
   // TODO: check if all cells in board are filled; if so call, call endGame
-
+  if (board.every(row => row.every(cell => cell))) {
+    return endGame("Draw!")
+  }
   // switch players
   // TODO: switch currPlayer 1 <-> 2
+  currPlayer = currPlayer === 1 ? 2 : 1;
 }
 
 /** checkForWin: check board cell-by-cell for "does a win start here?" */
